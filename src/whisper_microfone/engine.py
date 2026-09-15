@@ -143,7 +143,6 @@ class Engine(QObject):
                 audio = self._vad.trim_silence(audio)
                 if len(audio) == 0:
                     self.error_occurred.emit("Nenhuma fala detectada após VAD")
-                    self.state_changed.emit("idle")
                     return
 
             t0 = time.perf_counter()

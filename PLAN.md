@@ -15,7 +15,7 @@ local/CUDA que ainda precisam ser reconciliados.
 | Prioridade | Estado | Pendência | Critério de conclusão |
 |---|---|---|---|
 | P0 | Concluído | Alinhar specs e documentação gerada ao motor Groq | `scripts/gen_docs.py` executa e os documentos não expõem schemas removidos |
-| P0 | Em andamento | Criar cobertura automatizada mínima para configuração, transcrição e pipeline do engine | Testes protegem os contratos críticos sem chamar serviços externos |
+| P0 | Concluído | Criar cobertura automatizada mínima para configuração, transcrição e pipeline do engine | Testes protegem os contratos críticos sem chamar serviços externos |
 | P0 | Em andamento | Tornar a CI bloqueante para testes e typecheck | Pytest já bloqueia regressões; o passivo do mypy ainda precisa ser resolvido antes de remover `continue-on-error` |
 | P1 | Pendente | Remover ou substituir o script local obsoleto `scripts/pre_download_model.py` | Nenhum comando/documento promete download de modelo local |
 | P1 | Pendente | Validar o executável Groq em build limpo do Windows | Artefato inicia, encontra configuração/chave e conclui uma transcrição |
