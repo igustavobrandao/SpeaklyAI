@@ -17,7 +17,7 @@ local/CUDA que ainda precisam ser reconciliados.
 | P0 | Concluído | Alinhar specs e documentação gerada ao motor Groq | `scripts/gen_docs.py` executa e os documentos não expõem schemas removidos |
 | P0 | Concluído | Criar cobertura automatizada mínima para configuração, transcrição e pipeline do engine | Testes protegem os contratos críticos sem chamar serviços externos |
 | P0 | Concluído | Tornar a CI bloqueante para testes e typecheck do núcleo | Pytest e mypy de `config`, `core` e `engine` falham o pull request em regressões |
-| P1 | Pendente | Remover ou substituir o script local obsoleto `scripts/pre_download_model.py` | Nenhum comando/documento promete download de modelo local |
+| P1 | Concluído | Remover o script local obsoleto `scripts/pre_download_model.py` | Nenhum comando operacional promete download de modelo local |
 | P1 | Pendente | Validar o executável Groq em build limpo do Windows | Artefato inicia, encontra configuração/chave e conclui uma transcrição |
 | P1 | Pendente | Revisar telas e métricas herdadas de GPU/modelo local | UI exibe apenas diagnósticos relevantes ao motor atual |
 | P1 | Pendente | Migrar a UI para enums atuais do PySide6 e reincluí-la no mypy | A camada `ui/` volta a fazer parte do typecheck estrito |
@@ -514,7 +514,6 @@ whisper-microfone/
 │       └── stop.wav
 ├── scripts/
 │   ├── gen_docs.py                      # Gera docs/CONFIG.md de schemas
-│   ├── pre_download_model.py            # Baixa modelo antes do 1º uso
 │   ├── test_audio_devices.py            # Lista mics
 │   └── build_exe.py                     # PyInstaller
 ├── src/
@@ -1242,9 +1241,6 @@ pytest
 
 # Gerar docs de config
 python scripts/gen_docs.py
-
-# Pré-baixar modelo (offline-ready)
-python scripts/pre_download_model.py --model small
 
 # Listar dispositivos de áudio
 python scripts/test_audio_devices.py

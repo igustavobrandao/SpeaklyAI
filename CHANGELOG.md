@@ -29,6 +29,8 @@ e este projeto adota [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Removido
 
+- Script de pré-download do faster-whisper, incompatível com o motor Groq
+
 ---
 
 ## [0.1.0] - 2026-04-29
