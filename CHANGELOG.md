@@ -15,17 +15,21 @@ e este projeto adota [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Testes do pipeline do engine para ditado e descarte de silêncio pelo VAD
 - Execução bloqueante do pytest na CI
 - Typecheck bloqueante do núcleo da aplicação
+- Testes para ativar/desativar hotkeys e para o modo portátil
 
 ### Alterado
 
 - Plano e referência de configuração alinhados ao motor atual baseado na API Groq
 - Typecheck configurado com o plugin do Pydantic e escopo inicial em `config`, `core` e `engine`
+- Defaults avançados removem opções herdadas do motor CUDA
 
 ### Corrigido
 
 - Gerador de documentação atualizado para os schemas vigentes após a remoção do motor local
 - Pendências de lint que impediam a validação do código-fonte na CI
 - Emissão duplicada do estado `idle` quando o VAD descartava a gravação
+- Hotkeys de ditado e popup respeitam o campo `enabled`
+- Modo portátil é desativado corretamente ao recarregar a configuração
 
 ### Removido
 

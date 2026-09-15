@@ -86,8 +86,7 @@ def _apply_env_overrides(out: dict[str, Any]) -> dict[str, Any]:
 
     Exemplos:
         WHISPER_MIC_APP__LANGUAGE_UI=en
-        WHISPER_MIC_MODEL__NAME=medium
-        WHISPER_MIC_LIFECYCLE__UNLOAD_AFTER_IDLE_SECONDS=60
+        WHISPER_MIC_MODEL__GROQ_MODEL=whisper-large-v3
         WHISPER_MIC_ADVANCED__PORTABLE_MODE=true
     Pydantic faz coerção de tipo (string → int/bool/float).
     """
@@ -125,8 +124,7 @@ def _bootstrap_portable_mode(advanced_raw: dict[str, Any]) -> None:
     portable = advanced_raw.get("portable_mode", False)
     if isinstance(portable, str):
         portable = portable.lower() in ("1", "true", "yes")
-    if portable:
-        set_portable_mode(True)
+    set_portable_mode(bool(portable))
 
 
 def load_config() -> FullConfig:

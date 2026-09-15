@@ -3,11 +3,7 @@
 
 worker_thread_priority = "normal"
 audio_buffer_size = 4096
-gpu_memory_fraction = 0.0
-inter_op_threads = 0
-intra_op_threads = 0
 hotkey_poll_interval_ms = 10
 clipboard_timeout_ms = 2000
 sqlite_journal_mode = "WAL"
 portable_mode = false
-crash_reporter = true

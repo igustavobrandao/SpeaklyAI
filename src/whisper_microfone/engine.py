@@ -58,7 +58,8 @@ class Engine(QObject):
     # ------------------------------------------------------------------
 
     def start(self) -> None:
-        self._hotkey.start()
+        if self.config.shortcuts.push_to_talk.enabled:
+            self._hotkey.start()
         self._metrics_timer.start()
         self.state_changed.emit("idle")
         logger.info("Engine iniciado (Groq)")
@@ -89,6 +90,7 @@ class Engine(QObject):
 
     def update_config(self, new_config: FullConfig) -> None:
         old_combo = self.config.shortcuts.push_to_talk.combination
+        old_hotkey_enabled = self.config.shortcuts.push_to_talk.enabled
         self.config = new_config
 
         self._recorder = AudioRecorder(new_config.audio)
@@ -99,6 +101,12 @@ class Engine(QObject):
 
         if new_config.shortcuts.push_to_talk.combination != old_combo:
             self._hotkey.update_combination(new_config.shortcuts.push_to_talk.combination)
+
+        new_hotkey_enabled = new_config.shortcuts.push_to_talk.enabled
+        if old_hotkey_enabled and not new_hotkey_enabled:
+            self._hotkey.stop()
+        elif not old_hotkey_enabled and new_hotkey_enabled:
+            self._hotkey.start()
 
         self._metrics_timer.setInterval(new_config.ui.metrics_update_interval_ms)
 

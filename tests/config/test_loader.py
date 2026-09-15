@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from whisper_microfone.config import paths
+from whisper_microfone.config import loader, paths
 from whisper_microfone.config.loader import load_config
 
 
@@ -18,3 +18,12 @@ def test_load_config_bootstraps_current_groq_defaults(
     assert config.model.groq_model == "whisper-large-v3-turbo"
     assert config.models_catalog.available_models
     assert (tmp_path / "config" / "config.toml").is_file()
+
+
+def test_portable_mode_is_explicitly_disabled_when_config_is_false(monkeypatch) -> None:
+    calls: list[bool] = []
+    monkeypatch.setattr(loader, "set_portable_mode", calls.append)
+
+    loader._bootstrap_portable_mode({"portable_mode": False})
+
+    assert calls == [False]

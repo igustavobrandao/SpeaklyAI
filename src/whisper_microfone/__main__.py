@@ -63,12 +63,14 @@ def main() -> None:
         # Cruza da thread pynput → UI thread
         QMetaObject.invokeMethod(mic_popup, "toggle", Qt.ConnectionType.QueuedConnection)
 
-    popup_hotkey = PushToTalkHotkey(
-        config.shortcuts.open_mic_popup.combination,
-        on_press=_toggle_popup_safe,
-        on_release=lambda: None,
-    )
-    popup_hotkey.start()
+    popup_hotkey: PushToTalkHotkey | None = None
+    if config.shortcuts.open_mic_popup.enabled:
+        popup_hotkey = PushToTalkHotkey(
+            config.shortcuts.open_mic_popup.combination,
+            on_press=_toggle_popup_safe,
+            on_release=lambda: None,
+        )
+        popup_hotkey.start()
 
     # Inicia janela conforme configuração
     if config.app.start_minimized:
@@ -81,7 +83,8 @@ def main() -> None:
     exit_code = app.exec()
 
     engine.stop()
-    popup_hotkey.stop()
+    if popup_hotkey is not None:
+        popup_hotkey.stop()
     sys.exit(exit_code)
 
 

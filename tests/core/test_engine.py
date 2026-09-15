@@ -65,12 +65,14 @@ class _FakeHotkey:
     def __init__(self, _combination: str, on_press: object, on_release: object) -> None:
         self.on_press = on_press
         self.on_release = on_release
+        self.start_calls = 0
+        self.stop_calls = 0
 
     def start(self) -> None:
-        pass
+        self.start_calls += 1
 
     def stop(self) -> None:
-        pass
+        self.stop_calls += 1
 
     def update_combination(self, _combination: str) -> None:
         pass
@@ -81,7 +83,11 @@ class _FakeMetrics:
         return object()
 
 
-def _make_engine(monkeypatch, vad_class: type[_FakeVAD] = _FakeVAD):
+def _make_engine(
+    monkeypatch,
+    vad_class: type[_FakeVAD] = _FakeVAD,
+    config: FullConfig | None = None,
+):
     monkeypatch.setattr(engine_module, "AudioRecorder", _FakeRecorder)
     monkeypatch.setattr(engine_module, "SileroVAD", vad_class)
     monkeypatch.setattr(engine_module, "GroqTranscriber", _FakeTranscriber)
@@ -89,7 +95,7 @@ def _make_engine(monkeypatch, vad_class: type[_FakeVAD] = _FakeVAD):
     monkeypatch.setattr(engine_module, "HistoryStore", _FakeHistory)
     monkeypatch.setattr(engine_module, "PushToTalkHotkey", _FakeHotkey)
     monkeypatch.setattr(engine_module, "MetricsCollector", _FakeMetrics)
-    return engine_module.Engine(FullConfig())
+    return engine_module.Engine(config if config is not None else FullConfig())
 
 
 def test_engine_processes_dictation_without_real_devices_or_api(qapp, monkeypatch) -> None:
@@ -123,3 +129,31 @@ def test_engine_reports_vad_silence_without_calling_groq(qapp, monkeypatch) -> N
     assert engine._injector.texts == []
     assert errors == ["Nenhuma fala detectada após VAD"]
     assert states == ["idle"]
+
+
+def test_engine_honors_push_to_talk_enabled_when_started(qapp, monkeypatch) -> None:
+    config = FullConfig()
+    config.shortcuts.push_to_talk.enabled = False
+    engine = _make_engine(monkeypatch, config=config)
+
+    engine.start()
+
+    assert engine._hotkey.start_calls == 0
+    engine.stop()
+
+
+def test_engine_starts_and_stops_hotkey_after_config_change(qapp, monkeypatch) -> None:
+    engine = _make_engine(monkeypatch)
+    engine.start()
+
+    disabled_config = engine.config.model_copy(deep=True)
+    disabled_config.shortcuts.push_to_talk.enabled = False
+    engine.update_config(disabled_config)
+
+    enabled_config = disabled_config.model_copy(deep=True)
+    enabled_config.shortcuts.push_to_talk.enabled = True
+    engine.update_config(enabled_config)
+
+    assert engine._hotkey.start_calls == 2
+    assert engine._hotkey.stop_calls == 1
+    engine.stop()
