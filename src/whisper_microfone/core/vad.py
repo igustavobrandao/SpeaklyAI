@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 import numpy as np
 
@@ -48,7 +48,10 @@ def _load_model_safe() -> torch.jit.ScriptModule:
         load_path = jit_src
 
     try:
-        model = torch.jit.load(load_path, map_location="cpu")
+        model = cast(
+            torch.jit.ScriptModule,
+            torch.jit.load(load_path, map_location="cpu"),  # type: ignore[no-untyped-call]
+        )
     finally:
         if tmp_path is not None and os.path.exists(tmp_path):
             os.unlink(tmp_path)
@@ -64,7 +67,7 @@ class SileroVAD:
 
     def __init__(self, config: VADConfig) -> None:
         self._config = config
-        self._model: object | None = None
+        self._model: torch.jit.ScriptModule | None = None
 
         # Carregamento lazy — o modelo JIT é pesado e trava o __init__.
         # Será carregado na primeira chamada a trim_silence().
@@ -110,7 +113,7 @@ class SileroVAD:
 
     def _detect_speech(self, tensor: torch.Tensor) -> list[dict[str, int]]:
         cfg = self._config
-        return get_speech_timestamps(
+        timestamps = get_speech_timestamps(
             tensor,
             self._model,
             threshold=cfg.threshold,
@@ -120,6 +123,7 @@ class SileroVAD:
             window_size_samples=self._WINDOW_SIZE_SAMPLES,
             return_seconds=False,  # coordenadas em amostras para slice direto no numpy
         )
+        return cast(list[dict[str, int]], timestamps)
 
     def _collect(self, audio: np.ndarray, timestamps: list[dict[str, int]]) -> np.ndarray:
         """Concatena segmentos de fala detectados em um único array."""

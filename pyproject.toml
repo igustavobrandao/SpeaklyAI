@@ -43,6 +43,8 @@ ignore = ["E501"]
 python_version = "3.11"
 strict = true
 ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
+exclude = ["^src/whisper_microfone/ui/"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

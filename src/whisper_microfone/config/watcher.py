@@ -7,6 +7,7 @@ from typing import Any
 
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
+from watchdog.observers.api import BaseObserver
 
 from whisper_microfone.config.paths import config_dir
 
@@ -45,7 +46,7 @@ class _TomlChangeHandler(FileSystemEventHandler):
         if self._is_toml(event):
             self._schedule()
 
-    def on_moved(self, event: FileSystemEvent) -> None:  # type: ignore[override]
+    def on_moved(self, event: FileSystemEvent) -> None:
         dest = getattr(event, "dest_path", "")
         if not event.is_directory and str(dest).endswith(".toml"):
             self._schedule()
@@ -73,7 +74,7 @@ class ConfigWatcher:
         self._on_change = on_change
         self._watch_dir = watch_dir or config_dir()
         self._debounce_ms = debounce_ms
-        self._observer: Observer | None = None
+        self._observer: BaseObserver | None = None
         self._handler: _TomlChangeHandler | None = None
 
     def start(self) -> None:

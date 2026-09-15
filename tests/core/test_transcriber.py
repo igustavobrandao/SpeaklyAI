@@ -72,3 +72,15 @@ def test_transcribe_forwards_explicit_language_and_object_response(monkeypatch) 
     assert text == "English result"
     assert client.transcriptions.kwargs is not None
     assert client.transcriptions.kwargs["language"] == "en"
+
+
+def test_transcribe_omits_empty_optional_parameters(monkeypatch) -> None:
+    client = _FakeGroqClient("Result")
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    monkeypatch.setattr(transcriber_module, "Groq", lambda *, api_key: client)
+    transcriber = transcriber_module.GroqTranscriber(ModelConfig(), TranscriptionConfig())
+
+    assert transcriber.transcribe(np.zeros(800, dtype=np.float32)) == "Result"
+    assert client.transcriptions.kwargs is not None
+    assert "language" not in client.transcriptions.kwargs
+    assert "prompt" not in client.transcriptions.kwargs

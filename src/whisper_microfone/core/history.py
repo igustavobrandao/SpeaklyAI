@@ -143,7 +143,7 @@ class HistoryStore:
     def count(self) -> int:
         with self._connect() as conn:
             result = conn.execute("SELECT COUNT(*) FROM transcriptions").fetchone()
-        return result[0]
+        return int(result[0])
 
 
 # ------------------------------------------------------------------

@@ -81,4 +81,3 @@ jobs:
 
       - name: mypy check
         run: mypy src/
-        continue-on-error: true

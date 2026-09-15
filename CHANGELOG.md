@@ -14,10 +14,12 @@ e este projeto adota [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Testes automatizados mínimos para carregamento da configuração Groq e contrato de transcrição
 - Testes do pipeline do engine para ditado e descarte de silêncio pelo VAD
 - Execução bloqueante do pytest na CI
+- Typecheck bloqueante do núcleo da aplicação
 
 ### Alterado
 
 - Plano e referência de configuração alinhados ao motor atual baseado na API Groq
+- Typecheck configurado com o plugin do Pydantic e escopo inicial em `config`, `core` e `engine`
 
 ### Corrigido
 

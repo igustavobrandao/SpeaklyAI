@@ -31,19 +31,40 @@ class GroqTranscriber:
 
         model_name = self._model_cfg.groq_model or "whisper-large-v3-turbo"
 
-        kwargs: dict = {
-            "file": buf,
-            "model": model_name,
-            "response_format": "text",
-            "temperature": self._transcription.temperature,
-        }
-        if lang:
-            kwargs["language"] = lang
-        if self._transcription.initial_prompt:
-            kwargs["prompt"] = self._transcription.initial_prompt
-
+        prompt = self._transcription.initial_prompt
         logger.debug("Enviando áudio para Groq ({} amostras, modelo={})", len(audio), model_name)
-        result = self._client.audio.transcriptions.create(**kwargs)
+        if lang and prompt:
+            result = self._client.audio.transcriptions.create(
+                file=buf,
+                model=model_name,
+                response_format="text",
+                temperature=self._transcription.temperature,
+                language=lang,
+                prompt=prompt,
+            )
+        elif lang:
+            result = self._client.audio.transcriptions.create(
+                file=buf,
+                model=model_name,
+                response_format="text",
+                temperature=self._transcription.temperature,
+                language=lang,
+            )
+        elif prompt:
+            result = self._client.audio.transcriptions.create(
+                file=buf,
+                model=model_name,
+                response_format="text",
+                temperature=self._transcription.temperature,
+                prompt=prompt,
+            )
+        else:
+            result = self._client.audio.transcriptions.create(
+                file=buf,
+                model=model_name,
+                response_format="text",
+                temperature=self._transcription.temperature,
+            )
 
         text = result if isinstance(result, str) else getattr(result, "text", "")
         return text.strip()

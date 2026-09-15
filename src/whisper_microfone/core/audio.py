@@ -3,6 +3,7 @@ from __future__ import annotations
 import threading
 import time
 from collections import deque
+from collections.abc import Callable
 from contextlib import suppress
 
 import numpy as np
@@ -29,7 +30,7 @@ class AudioRecorder:
         self._chunks: deque[np.ndarray] = deque()
         self._stream: sd.InputStream | None = None
         self._lock = threading.Lock()
-        self.on_volume: object = None   # callable(rms: float) | None
+        self.on_volume: Callable[[float], None] | None = None
 
     # ------------------------------------------------------------------
     # Resolução de dispositivo
@@ -189,6 +190,7 @@ if __name__ == "__main__":
     print(f"AudioConfig: sample_rate={config.sample_rate}, channels={config.channels}, "
           f"min_duration_ms={config.min_duration_ms}, max_duration_seconds={config.max_duration_seconds}")
 
+    result: np.ndarray | None
     try:
         recorder.start()
         print("Stream aberto. Aguardando 0.1s...")
@@ -196,11 +198,9 @@ if __name__ == "__main__":
         result = recorder.stop()
     except AudioRecorderError as exc:
         print(f"Erro ao abrir microfone (esperado em ambiente sem microfone): {exc}")
-        result = "ERRO"
+        result = None
 
-    if result == "ERRO":
-        pass  # já impresso acima
-    elif result is None:
+    if result is None:
         print("Resultado: None (duração muito curta para o mínimo configurado)")
     else:
         print(f"Resultado: ndarray shape={result.shape}, dtype={result.dtype}, "
