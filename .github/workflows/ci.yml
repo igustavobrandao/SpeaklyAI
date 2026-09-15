@@ -28,6 +28,33 @@ jobs:
       - name: Ruff check
         run: ruff check src/
 
+  tests:
+    name: Tests (pytest)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~\AppData\Local\pip\Cache
+          key: pip-${{ runner.os }}-tests-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            pip-${{ runner.os }}-tests-
+
+      - name: Instalar dependencias e pytest
+        run: pip install -r requirements.txt pytest
+
+      - name: Pytest
+        run: pytest -q
+
   typecheck:
     name: Type check (mypy)
     runs-on: ubuntu-latest

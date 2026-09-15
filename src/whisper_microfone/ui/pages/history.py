@@ -1,21 +1,27 @@
 from __future__ import annotations
 
 import csv
-import os
-from datetime import datetime, timezone
+from contextlib import suppress
+from datetime import datetime
 from pathlib import Path
 
 import pyperclip
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
-    QWidget, QFrame, QVBoxLayout, QHBoxLayout,
-    QLabel, QPushButton, QLineEdit, QTableWidget,
-    QTableWidgetItem, QHeaderView, QAbstractItemView,
-    QSizePolicy,
+    QAbstractItemView,
+    QFrame,
+    QHBoxLayout,
+    QHeaderView,
+    QLineEdit,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QVBoxLayout,
+    QWidget,
 )
 
-from whisper_microfone.engine import Engine
 from whisper_microfone.config.schemas import FullConfig
+from whisper_microfone.engine import Engine
 
 # ---------------------------------------------------------------------------
 # Design tokens
@@ -274,10 +280,8 @@ class HistoryPage(QWidget):
     # ------------------------------------------------------------------
 
     def _on_clear(self) -> None:
-        try:
+        with suppress(Exception):
             self._engine._history.clear()
-        except Exception:
-            pass
         self._all_entries = []
         self._table.setRowCount(0)
 

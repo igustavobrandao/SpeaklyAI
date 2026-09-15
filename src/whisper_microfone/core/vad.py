@@ -23,7 +23,7 @@ except ImportError:
     )
 
 
-def _load_model_safe() -> "torch.jit.ScriptModule":
+def _load_model_safe() -> torch.jit.ScriptModule:
     """Carrega o modelo JIT do Silero VAD tolerando paths com caracteres não-ASCII.
 
     No Windows, ``torch.jit.load`` falha se o path contém caracteres fora do
@@ -105,10 +105,10 @@ class SileroVAD:
     # Helpers internos
     # ------------------------------------------------------------------
 
-    def _to_tensor(self, audio: np.ndarray) -> "torch.Tensor":
+    def _to_tensor(self, audio: np.ndarray) -> torch.Tensor:
         return torch.from_numpy(audio)
 
-    def _detect_speech(self, tensor: "torch.Tensor") -> list[dict[str, int]]:
+    def _detect_speech(self, tensor: torch.Tensor) -> list[dict[str, int]]:
         cfg = self._config
         return get_speech_timestamps(
             tensor,

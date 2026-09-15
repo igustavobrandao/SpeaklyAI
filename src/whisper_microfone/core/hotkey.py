@@ -7,7 +7,6 @@ from collections.abc import Callable
 from loguru import logger
 from pynput.keyboard import Key, KeyCode, Listener
 
-
 _MODIFIER_MAP: dict[str, Key] = {
     "ctrl": Key.ctrl_l,
     "alt": Key.alt_l,
@@ -122,10 +121,7 @@ class PushToTalkHotkey:
 
     def _all_target_matched(self) -> bool:
         """Retorna True se cada tecla do target tem pelo menos uma correspondência em _held."""
-        for t in self._target:
-            if not any(_key_matches(h, t) for h in self._held):
-                return False
-        return True
+        return all(any(_key_matches(h, target) for h in self._held) for target in self._target)
 
     def _held_matches(self, key: Key | KeyCode) -> bool:
         """Retorna True se key bate com alguma tecla do target."""

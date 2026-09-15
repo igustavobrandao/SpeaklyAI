@@ -2,13 +2,20 @@ from __future__ import annotations
 
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import (
-    QWidget, QFrame, QVBoxLayout, QHBoxLayout,
-    QLabel, QPushButton, QScrollArea, QComboBox,
-    QCheckBox, QSpinBox,
+    QCheckBox,
+    QComboBox,
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QScrollArea,
+    QSpinBox,
+    QVBoxLayout,
+    QWidget,
 )
 
-from whisper_microfone.engine import Engine
 from whisper_microfone.config.schemas import FullConfig
+from whisper_microfone.engine import Engine
 
 # ---------------------------------------------------------------------------
 # Design tokens

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import time
 import threading
+import time
 
 import pyperclip
 from pynput.keyboard import Controller, Key
@@ -39,9 +39,8 @@ class TextInjector:
         if self.config.capitalize_first and text:
             text = text[0].upper() + text[1:]
 
-        if self.config.sentence_end_punctuation and text:
-            if not text[-1] in ".!?":
-                text = text + self.config.sentence_end_punctuation
+        if self.config.sentence_end_punctuation and text and text[-1] not in ".!?":
+            text = text + self.config.sentence_end_punctuation
 
         if self.config.add_trailing_space:
             text = text + " "

@@ -3,15 +3,21 @@ from __future__ import annotations
 
 import math
 
-from PySide6.QtCore import Qt, QTimer, QRectF, QPointF, QPoint, QSize, Slot
+from PySide6.QtCore import QPoint, QPointF, QRectF, Qt, QTimer, Slot
 from PySide6.QtGui import (
-    QPainter, QColor, QPen, QBrush, QMouseEvent,
-    QConicalGradient, QFont, QLinearGradient, QRadialGradient,
+    QBrush,
+    QColor,
+    QConicalGradient,
+    QFont,
+    QLinearGradient,
+    QMouseEvent,
+    QPainter,
+    QPen,
+    QRadialGradient,
 )
 from PySide6.QtWidgets import QDialog, QWidget
 
 from whisper_microfone.engine import Engine
-
 
 # ---------------------------------------------------------------------------
 # Limites de tamanho
@@ -200,10 +206,7 @@ class MicPopup(QDialog):
         p.drawEllipse(QPointF(cx, cy), cr_draw, cr_draw)
 
         # borda do círculo
-        if is_rec:
-            rb = QColor(252, 165, 165, 56)
-        else:
-            rb = QColor(255, 255, 255, 18)
+        rb = QColor(252, 165, 165, 56) if is_rec else QColor(255, 255, 255, 18)
         ring_alpha = rb.alpha() if (is_rec or self._hovered) else 0
         p.setPen(QPen(QColor(rb.red(), rb.green(), rb.blue(), ring_alpha), 1.0))
         p.setBrush(Qt.BrushStyle.NoBrush)
@@ -428,9 +431,7 @@ class MicPopup(QDialog):
 
         if not (event.buttons() & Qt.MouseButton.LeftButton):
             # Cursores estáticos
-            if self._over_close(pos):
-                self.setCursor(Qt.CursorShape.PointingHandCursor)
-            elif self._over_circle(pos):
+            if self._over_close(pos) or self._over_circle(pos):
                 self.setCursor(Qt.CursorShape.PointingHandCursor)
             elif self._over_corner(pos):
                 self.setCursor(Qt.CursorShape.SizeFDiagCursor)

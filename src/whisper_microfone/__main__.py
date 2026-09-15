@@ -4,6 +4,21 @@ import os
 import sys
 from pathlib import Path
 
+from PySide6.QtCore import QMetaObject, Qt
+
+from whisper_microfone.config.loader import load_config
+from whisper_microfone.core.hotkey import PushToTalkHotkey
+from whisper_microfone.engine import Engine
+from whisper_microfone.logging_setup import setup_logging
+from whisper_microfone.ui.app import WhisperApp
+from whisper_microfone.ui.main_window import MainWindow
+from whisper_microfone.ui.mic_popup import MicPopup
+from whisper_microfone.ui.pages.about import AboutPage
+from whisper_microfone.ui.pages.config_page import ConfigPage
+from whisper_microfone.ui.pages.history import HistoryPage
+from whisper_microfone.ui.pages.home import HomePage
+from whisper_microfone.ui.tray import SystemTray
+
 
 def _load_dotenv() -> None:
     env_file = Path(__file__).resolve().parents[2] / ".env"
@@ -15,23 +30,6 @@ def _load_dotenv() -> None:
             continue
         key, _, value = line.partition("=")
         os.environ.setdefault(key.strip(), value.strip())
-
-from PySide6.QtWidgets import QApplication
-
-from whisper_microfone.config.loader import load_config
-from whisper_microfone.engine import Engine
-from whisper_microfone.logging_setup import setup_logging
-from whisper_microfone.ui.app import WhisperApp
-from whisper_microfone.ui.main_window import MainWindow
-from whisper_microfone.ui.pages.about import AboutPage
-from whisper_microfone.ui.pages.config_page import ConfigPage
-from whisper_microfone.ui.pages.history import HistoryPage
-from whisper_microfone.ui.pages.home import HomePage
-from whisper_microfone.ui.tray import SystemTray
-from PySide6.QtCore import QMetaObject, Qt
-
-from whisper_microfone.ui.mic_popup import MicPopup
-from whisper_microfone.core.hotkey import PushToTalkHotkey
 
 
 def main() -> None:

@@ -1,14 +1,19 @@
 from __future__ import annotations
 
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont, QPainter, QColor, QPen
+from PySide6.QtGui import QColor, QFont, QPainter, QPen
 from PySide6.QtWidgets import (
-    QWidget, QFrame, QVBoxLayout, QHBoxLayout,
-    QLabel, QScrollArea, QSizePolicy,
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QScrollArea,
+    QSizePolicy,
+    QVBoxLayout,
+    QWidget,
 )
 
-from whisper_microfone.engine import Engine
 from whisper_microfone.config.schemas import FullConfig
+from whisper_microfone.engine import Engine
 
 # ---------------------------------------------------------------------------
 # Design tokens

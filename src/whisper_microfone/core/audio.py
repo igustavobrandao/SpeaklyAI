@@ -3,6 +3,7 @@ from __future__ import annotations
 import threading
 import time
 from collections import deque
+from contextlib import suppress
 
 import numpy as np
 import sounddevice as sd
@@ -85,10 +86,8 @@ class AudioRecorder:
             self._chunks.append(chunk)
         if self.on_volume is not None:
             rms = float(np.sqrt(np.mean(chunk ** 2)))
-            try:
+            with suppress(Exception):
                 self.on_volume(rms)
-            except Exception:
-                pass
 
     # ------------------------------------------------------------------
     # API pública

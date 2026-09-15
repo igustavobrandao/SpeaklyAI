@@ -150,7 +150,7 @@ Exemplos:
     print(f"[build] Iniciando build — modo: {mode}, {console}")
     print(f"[build] Entry point : {ENTRY_POINT}")
     print(f"[build] Root        : {ROOT}")
-    print(f"[build] Args PyInstaller:")
+    print("[build] Args PyInstaller:")
     for arg in pyinstaller_args:
         print(f"         {arg}")
     print()

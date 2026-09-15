@@ -9,32 +9,24 @@ from __future__ import annotations
 
 import sys
 from pathlib import Path
-from typing import Any
 
 # Garante que src/ está no path ao rodar como script
 _ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(_ROOT / "src"))
 
-from pydantic.fields import FieldInfo
+from pydantic.fields import FieldInfo  # noqa: E402
 
-from whisper_microfone.config.schemas import (
+from whisper_microfone.config.schemas import (  # noqa: E402
     AdvancedConfig,
     AppConfig,
     AudioConfig,
-    FullConfig,
+    GroqModelEntry,
     HistoryConfig,
     InjectionConfig,
     KeyCombination,
-    LifecycleConfig,
     LoggingConfig,
     ModelConfig,
-    ModelEntry,
-    ModelProfile,
-    ModelsCatalog,
-    PromptsConfig,
-    ShortcutsConfig,
     ThemeColor,
-    ThemeConfig,
     ThemeFont,
     ThemeLayout,
     TranscriptionConfig,
@@ -49,7 +41,6 @@ _SECTIONS: list[tuple[str, str, type, str]] = [
     # (título PT, título EN, modelo, arquivo TOML)
     ("Aplicação", "Application", AppConfig, "config.toml → [app]"),
     ("Modelo", "Model", ModelConfig, "config.toml → [model]"),
-    ("Ciclo de vida", "Lifecycle", LifecycleConfig, "config.toml → [lifecycle]"),
     ("Áudio", "Audio", AudioConfig, "config.toml → [audio]"),
     ("VAD (detecção de voz)", "VAD (voice activity detection)", VADConfig, "config.toml → [vad]"),
     ("Transcrição", "Transcription", TranscriptionConfig, "config.toml → [transcription]"),
@@ -61,14 +52,16 @@ _SECTIONS: list[tuple[str, str, type, str]] = [
     ("Fontes", "Fonts", ThemeFont, "theme.toml → [fonts]"),
     ("Layout", "Layout", ThemeLayout, "theme.toml → [layout]"),
     ("Atalhos — Push-to-talk", "Shortcuts — Push-to-talk", KeyCombination, "shortcuts.toml → [push_to_talk]"),
-    ("Catálogo — Perfil", "Catalog — Profile", ModelProfile, "models.toml → [profiles.*]"),
-    ("Catálogo — Modelo", "Catalog — Model entry", ModelEntry, "models.toml → [[available_models]]"),
+    ("Atalhos — Popup", "Shortcuts — Popup", KeyCombination, "shortcuts.toml → [open_mic_popup]"),
+    ("Catálogo — Modelo Groq", "Catalog — Groq model", GroqModelEntry, "models.toml → [[available_models]]"),
     ("Avançado", "Advanced", AdvancedConfig, "advanced.toml"),
 ]
 
 
 def _default_repr(field: FieldInfo) -> str:
     """Representação legível do valor default de um campo."""
+    if field.is_required():
+        return "—"
     if field.default is not None and field.default is not ...:
         val = field.default
         if isinstance(val, bool):
@@ -132,9 +125,9 @@ def _render_section(title: str, model: type, toml_ref: str, lang: str) -> str:
     """Renderiza uma seção Markdown para um schema Pydantic."""
     lines: list[str] = []
     lines.append(f"### {title}")
-    lines.append(f"")
+    lines.append("")
     lines.append(f"**Arquivo:** `{toml_ref}`")
-    lines.append(f"")
+    lines.append("")
     lines.append("| Campo | Tipo | Default | Restrições | Descrição |" if lang == "pt"
                  else "| Field | Type | Default | Constraints | Description |")
     lines.append("|---|---|---|---|---|")

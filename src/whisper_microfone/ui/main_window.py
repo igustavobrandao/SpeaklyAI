@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
-    QApplication,
     QFrame,
     QHBoxLayout,
     QLabel,
@@ -19,7 +18,6 @@ from whisper_microfone.assets.icon import make_app_icon
 from whisper_microfone.config.schemas import FullConfig
 from whisper_microfone.engine import Engine
 from whisper_microfone.ui.theme import AppTheme
-
 
 # ---------------------------------------------------------------------------
 # Helpers internos
@@ -213,7 +211,7 @@ class _Sidebar(QFrame):
         self._status_label = QLabel("Pronto")
         self._status_label.setStyleSheet(
             "color: rgba(255,255,255,0.35);"
-            f"font-size: 11px;"
+            "font-size: 11px;"
             "background: transparent;"
         )
 

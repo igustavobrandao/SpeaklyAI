@@ -1,5 +1,41 @@
 # Whisper Microfone — Plano de Arquitetura e Implementação
 
+> [!IMPORTANT]
+> Este documento registra a arquitetura original, baseada em `faster-whisper`
+> local/CUDA. Desde o commit `489ad46`, o produto usa a API Whisper da Groq.
+> Para trabalho novo, o estado e as pendências abaixo prevalecem sobre as
+> seções históricas deste arquivo.
+
+## Estado atual e pendências (2026-09-15)
+
+As Fases 1–5 foram implementadas e o aplicativo está na versão Alpha 0.1.0.
+A migração para Groq simplificou o motor, mas deixou artefatos do desenho
+local/CUDA que ainda precisam ser reconciliados.
+
+| Prioridade | Estado | Pendência | Critério de conclusão |
+|---|---|---|---|
+| P0 | Concluído | Alinhar specs e documentação gerada ao motor Groq | `scripts/gen_docs.py` executa e os documentos não expõem schemas removidos |
+| P0 | Em andamento | Criar cobertura automatizada mínima para configuração, transcrição e pipeline do engine | Testes protegem os contratos críticos sem chamar serviços externos |
+| P0 | Em andamento | Tornar a CI bloqueante para testes e typecheck | Pytest já bloqueia regressões; o passivo do mypy ainda precisa ser resolvido antes de remover `continue-on-error` |
+| P1 | Pendente | Remover ou substituir o script local obsoleto `scripts/pre_download_model.py` | Nenhum comando/documento promete download de modelo local |
+| P1 | Pendente | Validar o executável Groq em build limpo do Windows | Artefato inicia, encontra configuração/chave e conclui uma transcrição |
+| P1 | Pendente | Revisar telas e métricas herdadas de GPU/modelo local | UI exibe apenas diagnósticos relevantes ao motor atual |
+| P2 | Pendente | Atualizar versão e changelog da migração | Metadados e notas de release descrevem a arquitetura Groq |
+
+### Contrato vigente do motor
+
+```text
+hotkey/click → captura 16 kHz mono → VAD Silero → WAV em memória
+             → Groq Whisper API → normalização → injeção/clipboard
+```
+
+- O motor requer `GROQ_API_KEY`; nenhum modelo local é carregado.
+- O modelo padrão é `whisper-large-v3-turbo` e permanece configurável.
+- O áudio é enviado à Groq; o produto não deve ser descrito como processamento totalmente local.
+- Configurações do usuário continuam em TOML e segredos ficam fora desses arquivos.
+
+## Arquitetura original (referência histórica)
+
 > **Objetivo:** substituto open source do `Win + H` do Windows. Hotkey global push-to-talk → grava microfone → transcreve localmente com Whisper na GPU → injeta texto na janela ativa.
 >
 > **Princípios:** zero hardcoded, motor sob demanda (lazy load + auto-unload), interface estilo VS Code, multilíngue (PT-BR + EN) desde o dia 1.

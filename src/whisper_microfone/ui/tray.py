@@ -8,9 +8,9 @@ from __future__ import annotations
 
 import math
 
-from PySide6.QtCore import Qt, QTimer, QRectF
-from PySide6.QtGui import QPainter, QColor, QIcon, QPixmap, QPen, QBrush, QAction
-from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QMainWindow
+from PySide6.QtCore import QRectF, Qt, QTimer
+from PySide6.QtGui import QAction, QBrush, QColor, QIcon, QPainter, QPen, QPixmap
+from PySide6.QtWidgets import QMainWindow, QMenu, QSystemTrayIcon
 
 from whisper_microfone.config.schemas import FullConfig
 from whisper_microfone.engine import Engine

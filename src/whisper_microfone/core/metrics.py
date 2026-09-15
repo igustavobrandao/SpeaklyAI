@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from contextlib import suppress
 from dataclasses import dataclass
 
 import psutil
@@ -63,10 +64,8 @@ class MetricsCollector:
 
     def __del__(self) -> None:
         if _NVML_AVAILABLE and self._gpu_handle is not None:
-            try:
+            with suppress(Exception):
                 nvml.nvmlShutdown()
-            except Exception:
-                pass
 
 
 if __name__ == "__main__":

@@ -99,7 +99,7 @@ class ConfigWatcher:
     def is_running(self) -> bool:
         return self._observer is not None and self._observer.is_alive()
 
-    def __enter__(self) -> "ConfigWatcher":
+    def __enter__(self) -> ConfigWatcher:
         self.start()
         return self
 

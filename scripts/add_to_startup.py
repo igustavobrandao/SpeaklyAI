@@ -53,7 +53,7 @@ def _add_startup(run_bat: Path) -> None:
         print(f"[ERRO] Nao foi possivel gravar no registro: {exc}", file=sys.stderr)
         sys.exit(1)
 
-    print(f"Startup adicionado com sucesso.")
+    print("Startup adicionado com sucesso.")
     print(f"  Chave : HKCU\\{_REGISTRY_KEY}")
     print(f"  Nome  : {_APP_NAME}")
     print(f"  Valor : {command}")

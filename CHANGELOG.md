@@ -11,9 +11,17 @@ e este projeto adota [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ### Adicionado
 
+- Testes automatizados mínimos para carregamento da configuração Groq e contrato de transcrição
+- Execução bloqueante do pytest na CI
+
 ### Alterado
 
+- Plano e referência de configuração alinhados ao motor atual baseado na API Groq
+
 ### Corrigido
+
+- Gerador de documentação atualizado para os schemas vigentes após a remoção do motor local
+- Pendências de lint que impediam a validação do código-fonte na CI
 
 ### Removido
 

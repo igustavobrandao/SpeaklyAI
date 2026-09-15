@@ -134,10 +134,7 @@ class TranscriptionCard(QFrame):
 
         # Limita a exibição a _MAX_LINES linhas truncando por caracteres
         lines = text.splitlines()
-        if len(lines) > _MAX_LINES:
-            display_text = "\n".join(lines[:_MAX_LINES]) + "…"
-        else:
-            display_text = text
+        display_text = "\n".join(lines[:_MAX_LINES]) + "…" if len(lines) > _MAX_LINES else text
 
         self._last_text = text
         self._btn_copy.setVisible(True)
