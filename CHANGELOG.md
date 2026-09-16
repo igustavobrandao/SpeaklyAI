@@ -7,7 +7,7 @@ e este projeto adota [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ---
 
-## [Não lançado]
+## [0.2.0] - 2026-09-15
 
 ### Adicionado
 
@@ -62,5 +62,5 @@ Primeiro release Alpha.
 
 ---
 
-[Não lançado]: https://github.com/Gustavo1341/whisper-microphone/compare/v0.1.0...HEAD
+[0.2.0]: https://github.com/Gustavo1341/whisper-microphone/compare/v0.1.0...HEAD
 [0.1.0]: https://github.com/Gustavo1341/whisper-microphone/releases/tag/v0.1.0

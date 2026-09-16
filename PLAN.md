@@ -8,7 +8,7 @@
 
 ## Estado atual e pendências (2026-09-15)
 
-As Fases 1–5 foram implementadas e o aplicativo está na versão Alpha 0.1.0.
+As Fases 1–5 foram implementadas e o aplicativo está na versão Alpha 0.2.0.
 A migração para Groq simplificou o motor, mas deixou artefatos do desenho
 local/CUDA que ainda precisam ser reconciliados.
 
@@ -21,7 +21,7 @@ local/CUDA que ainda precisam ser reconciliados.
 | P1 | Em andamento | Validar o executável Groq em build limpo do Windows | Build one-file de 287,8 MB passou; falta iniciar sem conflito de instância e concluir uma transcrição |
 | P1 | Concluído | Revisar telas e métricas herdadas de GPU/modelo local | UI diferencia as métricas do sistema do processamento Groq em nuvem |
 | P1 | Pendente | Migrar a UI para enums atuais do PySide6 e reincluí-la no mypy | A camada `ui/` volta a fazer parte do typecheck estrito |
-| P2 | Pendente | Atualizar versão e changelog da migração | Metadados e notas de release descrevem a arquitetura Groq |
+| P2 | Concluído | Atualizar versão e changelog da migração | Metadados e notas de release descrevem a arquitetura Groq |
 
 ### Contrato vigente do motor
 

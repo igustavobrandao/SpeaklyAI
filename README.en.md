@@ -1,6 +1,6 @@
 # Whisper Microfone
 
-![Status](https://img.shields.io/badge/status-Alpha%200.1.0-orange) ![Python](https://img.shields.io/badge/python-3.11%2B-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Platform](https://img.shields.io/badge/platform-Windows-blue)
+![Status](https://img.shields.io/badge/status-Alpha%200.2.0-orange) ![Python](https://img.shields.io/badge/python-3.11%2B-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Platform](https://img.shields.io/badge/platform-Windows-blue)
 
 An open source replacement for Windows' built-in Win+H dictation. Press a hotkey, speak, release — the transcribed text appears wherever your cursor is. Transcription powered by [Groq Whisper API](https://console.groq.com/), no local model, no GPU required.
 
