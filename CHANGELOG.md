@@ -22,6 +22,8 @@ e este projeto adota [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Plano e referência de configuração alinhados ao motor atual baseado na API Groq
 - Typecheck configurado com o plugin do Pydantic e escopo inicial em `config`, `core` e `engine`
 - Defaults avançados removem opções herdadas do motor CUDA
+- Tela Sobre exibe versão centralizada e descreve o processamento pela API Groq
+- Monitor identifica RAM, CPU, GPU e VRAM como métricas do sistema
 
 ### Corrigido
 

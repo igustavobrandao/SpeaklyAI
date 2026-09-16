@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
 
 from whisper_microfone.config.schemas import FullConfig
 from whisper_microfone.engine import Engine
+from whisper_microfone.version import VERSION
 
 # ---------------------------------------------------------------------------
 # Design tokens
@@ -24,7 +25,7 @@ TEXT_PRIMARY   = "rgba(255,255,255,0.90)"
 TEXT_SECONDARY = "rgba(255,255,255,0.48)"
 ACCENT         = "#0071E3"
 
-APP_VERSION    = "v0.1.0 Alpha"
+APP_VERSION    = f"v{VERSION} Alpha"
 APP_NAME       = "Whisper Microfone"
 APP_SUBTITLE   = "Ditado por voz via Groq Whisper API"
 REPO_URL       = "https://github.com/Gustavo1341/whisper-microphone"
@@ -140,10 +141,10 @@ class AboutPage(QWidget):
         grid.setColumnMinimumWidth(0, 140)
         grid.setColumnStretch(1, 1)
 
-        _grid_row(grid, 0, "Modelo",     self._config.model.groq_model)
-        _grid_row(grid, 1, "Idioma",     self._config.model.language)
-        _grid_row(grid, 2, "Rate limit", "20 req/min · 2000 min/dia (gratuito)")
-        _grid_row(grid, 3, "Licença",    "MIT License")
+        _grid_row(grid, 0, "Modelo", self._config.model.groq_model)
+        _grid_row(grid, 1, "Idioma", self._config.model.language)
+        _grid_row(grid, 2, "Processamento", "API Groq (nuvem)")
+        _grid_row(grid, 3, "Licença", "MIT License")
 
         layout.addLayout(grid)
 

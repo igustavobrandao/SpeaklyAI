@@ -258,7 +258,7 @@ class MonitorPage(QWidget):
         self._content.addWidget(card)
 
     def _build_metrics_card(self) -> None:
-        card, layout = _make_card("Histórico de métricas")
+        card, layout = _make_card("Métricas do sistema")
 
         self._metric_rows: dict[str, _MetricRow] = {
             "ram":  _MetricRow("RAM",  unit=" MB", color="#0071E3"),
