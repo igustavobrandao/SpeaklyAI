@@ -129,9 +129,9 @@ def _make_icon(state: str, angle: int = 0) -> QIcon:
         pen.setCapStyle(Qt.PenCapStyle.RoundCap)
         painter.setPen(pen)
         cross_margin = size * 0.28
-        r = QRectF(cross_margin, cross_margin, size - 2 * cross_margin, size - 2 * cross_margin)
-        painter.drawLine(r.topLeft(), r.bottomRight())
-        painter.drawLine(r.topRight(), r.bottomLeft())
+        cross_rect = QRectF(cross_margin, cross_margin, size - 2 * cross_margin, size - 2 * cross_margin)
+        painter.drawLine(cross_rect.topLeft(), cross_rect.bottomRight())
+        painter.drawLine(cross_rect.topRight(), cross_rect.bottomLeft())
 
     painter.end()
     return QIcon(pixmap)

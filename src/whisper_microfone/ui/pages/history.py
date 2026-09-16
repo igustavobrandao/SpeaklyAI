@@ -41,6 +41,7 @@ _COL_TEXT      = 2
 _COL_DURATION  = 3
 _COL_LATENCY   = 4
 _COL_COPY      = 5
+HistoryEntry = dict[str, str | float]
 
 
 # ---------------------------------------------------------------------------
@@ -52,7 +53,7 @@ class HistoryPage(QWidget):
         super().__init__()
         self._engine = engine
         self._config = config
-        self._all_entries: list[dict] = []
+        self._all_entries: list[HistoryEntry] = []
 
         self._build_ui()
         self._connect_signals()
@@ -89,7 +90,7 @@ class HistoryPage(QWidget):
 
         self._btn_clear = QPushButton("Limpar histórico")
         self._btn_clear.setFixedHeight(36)
-        self._btn_clear.setCursor(Qt.PointingHandCursor)
+        self._btn_clear.setCursor(Qt.CursorShape.PointingHandCursor)
         self._btn_clear.setStyleSheet(f"""
             QPushButton {{
                 border: none;
@@ -104,7 +105,7 @@ class HistoryPage(QWidget):
 
         self._btn_export = QPushButton("Exportar CSV")
         self._btn_export.setFixedHeight(36)
-        self._btn_export.setCursor(Qt.PointingHandCursor)
+        self._btn_export.setCursor(Qt.CursorShape.PointingHandCursor)
         self._btn_export.setStyleSheet(f"""
             QPushButton {{
                 border: none;
@@ -128,11 +129,11 @@ class HistoryPage(QWidget):
         self._table.setHorizontalHeaderLabels(_COLUMNS)
         self._table.setShowGrid(False)
         self._table.setAlternatingRowColors(True)
-        self._table.setSelectionBehavior(QAbstractItemView.SelectRows)
-        self._table.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        self._table.setFocusPolicy(Qt.NoFocus)
+        self._table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self._table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self._table.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self._table.verticalHeader().setVisible(False)
-        self._table.setFrameShape(QFrame.NoFrame)
+        self._table.setFrameShape(QFrame.Shape.NoFrame)
 
         self._table.setStyleSheet(f"""
             QTableWidget {{
@@ -165,12 +166,12 @@ class HistoryPage(QWidget):
         """)
 
         header = self._table.horizontalHeader()
-        header.setSectionResizeMode(_COL_TIMESTAMP, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(_COL_LANGUAGE,  QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(_COL_TEXT,      QHeaderView.Stretch)
-        header.setSectionResizeMode(_COL_DURATION,  QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(_COL_LATENCY,   QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(_COL_COPY,      QHeaderView.Fixed)
+        header.setSectionResizeMode(_COL_TIMESTAMP, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(_COL_LANGUAGE, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(_COL_TEXT, QHeaderView.ResizeMode.Stretch)
+        header.setSectionResizeMode(_COL_DURATION, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(_COL_LATENCY, QHeaderView.ResizeMode.ResizeToContents)
+        header.setSectionResizeMode(_COL_COPY, QHeaderView.ResizeMode.Fixed)
         self._table.setColumnWidth(_COL_COPY, 72)
 
         self._table.setRowHeight(0, 40)
@@ -185,7 +186,7 @@ class HistoryPage(QWidget):
     def _connect_signals(self) -> None:
         self._engine.transcribed.connect(self._on_new_transcription)
 
-    def _on_new_transcription(self, text: str, meta: dict) -> None:
+    def _on_new_transcription(self, _text: str, _meta: dict[str, float | str]) -> None:
         self._load()
 
     # ------------------------------------------------------------------
@@ -200,37 +201,37 @@ class HistoryPage(QWidget):
         self._all_entries = entries
         self.load_entries(entries)
 
-    def load_entries(self, entries: list[dict]) -> None:
+    def load_entries(self, entries: list[HistoryEntry]) -> None:
         self._table.setRowCount(0)
         for entry in entries:
             self._append_row(entry)
 
-    def _append_row(self, entry: dict) -> None:
+    def _append_row(self, entry: HistoryEntry) -> None:
         row = self._table.rowCount()
         self._table.insertRow(row)
 
         # Hora — formata ISO → HH:MM:SS local
-        ts_raw = entry.get("timestamp", "")
+        ts_raw = str(entry.get("timestamp", ""))
         try:
             dt = datetime.fromisoformat(ts_raw)
             ts_display = dt.astimezone().strftime("%H:%M:%S")
         except Exception:
             ts_display = ts_raw
 
-        duration_s = entry.get("duration_ms", 0) / 1000
-        latency_ms = entry.get("latency_ms", 0)
+        duration_s = float(entry.get("duration_ms", 0.0)) / 1000
+        latency_ms = float(entry.get("latency_ms", 0.0))
 
         cells = [
             ts_display,
-            entry.get("language", ""),
-            entry.get("text", ""),
+            str(entry.get("language", "")),
+            str(entry.get("text", "")),
             f"{duration_s:.1f}s",
             f"{latency_ms:.0f} ms",
         ]
 
         for col, value in enumerate(cells):
             item = QTableWidgetItem(value)
-            item.setFlags(Qt.ItemIsSelectable | Qt.ItemIsEnabled)
+            item.setFlags(Qt.ItemFlag.ItemIsSelectable | Qt.ItemFlag.ItemIsEnabled)
             self._table.setItem(row, col, item)
 
         # Botão copiar
@@ -271,7 +272,7 @@ class HistoryPage(QWidget):
 
         filtered = [
             e for e in self._all_entries
-            if q in e.get("text", "").lower()
+            if q in str(e.get("text", "")).lower()
         ]
         self.load_entries(filtered)
 

@@ -67,10 +67,10 @@ def _grid_row(grid: QGridLayout, row: int, label: str, value: str) -> None:
         f"font-size: 13px; color: {TEXT_PRIMARY}; font-weight: 500;"
         " background: transparent;"
     )
-    val.setTextInteractionFlags(Qt.TextSelectableByMouse)
+    val.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
 
-    grid.addWidget(lbl, row, 0, Qt.AlignLeft)
-    grid.addWidget(val, row, 1, Qt.AlignLeft)
+    grid.addWidget(lbl, row, 0, Qt.AlignmentFlag.AlignLeft)
+    grid.addWidget(val, row, 1, Qt.AlignmentFlag.AlignLeft)
 
 
 class AboutPage(QWidget):
@@ -86,7 +86,7 @@ class AboutPage(QWidget):
         outer = QVBoxLayout(self)
         outer.setContentsMargins(48, 48, 48, 48)
         outer.setSpacing(24)
-        outer.setAlignment(Qt.AlignTop | Qt.AlignHCenter)
+        outer.setAlignment(Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter)
 
         self._build_hero(outer)
         self._build_info_card(outer)
@@ -95,13 +95,13 @@ class AboutPage(QWidget):
     def _build_hero(self, parent_layout: QVBoxLayout) -> None:
         hero = QVBoxLayout()
         hero.setSpacing(6)
-        hero.setAlignment(Qt.AlignHCenter)
+        hero.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 
         icon_lbl = QLabel("🎙")
         icon_font = QFont()
         icon_font.setPointSize(36)
         icon_lbl.setFont(icon_font)
-        icon_lbl.setAlignment(Qt.AlignHCenter)
+        icon_lbl.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         icon_lbl.setStyleSheet("background: transparent;")
 
         title_lbl = QLabel(APP_NAME)
@@ -112,19 +112,19 @@ class AboutPage(QWidget):
         title_lbl.setStyleSheet(
             f"color: {TEXT_PRIMARY}; background: transparent;"
         )
-        title_lbl.setAlignment(Qt.AlignHCenter)
+        title_lbl.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 
         version_lbl = QLabel(APP_VERSION)
         version_lbl.setStyleSheet(
             f"font-size: 14px; color: {TEXT_SECONDARY}; background: transparent;"
         )
-        version_lbl.setAlignment(Qt.AlignHCenter)
+        version_lbl.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 
         subtitle_lbl = QLabel(APP_SUBTITLE)
         subtitle_lbl.setStyleSheet(
             f"font-size: 14px; color: {TEXT_SECONDARY}; background: transparent;"
         )
-        subtitle_lbl.setAlignment(Qt.AlignHCenter)
+        subtitle_lbl.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 
         hero.addWidget(icon_lbl)
         hero.addWidget(title_lbl)
@@ -160,22 +160,22 @@ class AboutPage(QWidget):
     def _build_footer(self, parent_layout: QVBoxLayout) -> None:
         footer = QVBoxLayout()
         footer.setSpacing(4)
-        footer.setAlignment(Qt.AlignHCenter)
+        footer.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 
         license_lbl = QLabel(LICENSE_LINE)
         license_lbl.setStyleSheet(
             f"font-size: 12px; color: {TEXT_SECONDARY}; background: transparent;"
         )
-        license_lbl.setAlignment(Qt.AlignHCenter)
+        license_lbl.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 
         repo_lbl = QLabel(
             f'<a href="{REPO_URL}" style="color: {ACCENT}; text-decoration: none;">'
             f"{REPO_LABEL}</a>"
         )
-        repo_lbl.setTextFormat(Qt.RichText)
+        repo_lbl.setTextFormat(Qt.TextFormat.RichText)
         repo_lbl.setOpenExternalLinks(False)
-        repo_lbl.setCursor(Qt.PointingHandCursor)
-        repo_lbl.setAlignment(Qt.AlignHCenter)
+        repo_lbl.setCursor(Qt.CursorShape.PointingHandCursor)
+        repo_lbl.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         repo_lbl.setStyleSheet("background: transparent;")
         repo_lbl.linkActivated.connect(
             lambda _: QDesktopServices.openUrl(QUrl(REPO_URL))

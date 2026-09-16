@@ -118,7 +118,7 @@ class TranscriptionCard(QFrame):
     # Public API
     # ------------------------------------------------------------------
 
-    def set_transcription(self, text: str, metadata: dict) -> None:
+    def set_transcription(self, text: str, metadata: dict[str, float | str]) -> None:
         """Atualiza o card com nova transcrição e metadados.
 
         Args:
@@ -148,15 +148,15 @@ class TranscriptionCard(QFrame):
         # Rodapé
         parts: list[str] = []
         language = metadata.get("language", "")
-        if language and language != "auto":
+        if isinstance(language, str) and language and language != "auto":
             parts.append(language.upper())
 
         latency_ms = metadata.get("latency_ms")
-        if latency_ms is not None:
+        if isinstance(latency_ms, float):
             parts.append(f"{latency_ms:.0f} ms")
 
         duration_ms = metadata.get("duration_ms")
-        if duration_ms is not None:
+        if isinstance(duration_ms, float):
             parts.append(f"{duration_ms / 1000:.1f}s áudio")
 
         self._footer_label.setText("  ·  ".join(parts))

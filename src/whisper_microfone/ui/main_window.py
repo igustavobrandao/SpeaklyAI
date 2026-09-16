@@ -347,6 +347,8 @@ class MainWindow(QMainWindow):
         if index < 0 or index >= self._pages.count():
             raise IndexError(f"Índice de página inválido: {index}")
         old_widget = self._pages.widget(index)
+        if old_widget is None:
+            raise RuntimeError(f"Página ausente no índice {index}")
         self._pages.insertWidget(index, widget)
         self._pages.removeWidget(old_widget)
         old_widget.deleteLater()

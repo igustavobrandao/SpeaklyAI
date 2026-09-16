@@ -42,7 +42,7 @@ _ANIM_MS     = 16
 _COUNTDOWN_S = 1
 
 
-def _tokens(size: int) -> dict:
+def _tokens(size: int) -> dict[str, int]:
     """Recalcula todos os tokens de layout proporcionalmente ao tamanho do card."""
     s  = size
     r  = max(14, round(s * 22 / 168))       # border-radius
@@ -121,7 +121,7 @@ class MicPopup(QDialog):
     # Paint principal
     # ------------------------------------------------------------------
 
-    def paintEvent(self, _event) -> None:  # type: ignore[override]
+    def paintEvent(self, _event: object) -> None:
         t   = _tokens(self._card_size)
         W   = t["s"]
         H   = t["s"]
@@ -418,11 +418,11 @@ class MicPopup(QDialog):
             self._is_resize = False
             self._drag_pos  = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
 
-    def enterEvent(self, event) -> None:  # type: ignore[override]
+    def enterEvent(self, _event: object) -> None:
         self._hovered = True
         self.update()
 
-    def leaveEvent(self, event) -> None:  # type: ignore[override]
+    def leaveEvent(self, _event: object) -> None:
         self._hovered = False
         self.update()
 
@@ -450,8 +450,8 @@ class MicPopup(QDialog):
 
         if self._drag_pos is None:
             return
-        delta = pos.toPoint() - self._press_pos
-        if not self._did_drag and (abs(delta.x()) > 4 or abs(delta.y()) > 4):
+        drag_delta = pos.toPoint() - self._press_pos
+        if not self._did_drag and (abs(drag_delta.x()) > 4 or abs(drag_delta.y()) > 4):
             self._did_drag = True
         if self._did_drag:
             self.setCursor(Qt.CursorShape.ClosedHandCursor)
@@ -527,7 +527,7 @@ class MicPopup(QDialog):
         self._volume = rms
         self.update()
 
-    def _on_transcribed(self, _text: str, _meta: dict) -> None:
+    def _on_transcribed(self, _text: str, _meta: dict[str, float | str]) -> None:
         self._phase = "done"
         self._label = "Colado ✓"
         self._vol_smooth = 0.0

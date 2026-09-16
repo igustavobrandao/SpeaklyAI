@@ -15,12 +15,14 @@ e este projeto adota [Semantic Versioning](https://semver.org/lang/pt-BR/).
 - Testes do pipeline do engine para ditado e descarte de silêncio pelo VAD
 - Execução bloqueante do pytest na CI
 - Typecheck bloqueante do núcleo da aplicação
+- Typecheck estrito da camada de UI
 - Testes para ativar/desativar hotkeys e para o modo portátil
 
 ### Alterado
 
 - Plano e referência de configuração alinhados ao motor atual baseado na API Groq
 - Typecheck configurado com o plugin do Pydantic e escopo inicial em `config`, `core` e `engine`
+- UI migrada para os enums atuais do PySide6
 - Defaults avançados removem opções herdadas do motor CUDA
 - Tela Sobre exibe versão centralizada e descreve o processamento pela API Groq
 - Monitor identifica RAM, CPU, GPU e VRAM como métricas do sistema

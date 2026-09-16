@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
 )
 
 from whisper_microfone.config.schemas import FullConfig
+from whisper_microfone.core.metrics import Metrics
 from whisper_microfone.engine import Engine
 
 # ---------------------------------------------------------------------------
@@ -72,7 +73,7 @@ class LiveChart(QWidget):
         self._points: list[float] = []
         self.setMinimumHeight(48)
         self.setMinimumWidth(120)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
 
     def add_point(self, value: float) -> None:
         self._points.append(value)
@@ -80,9 +81,9 @@ class LiveChart(QWidget):
             self._points.pop(0)
         self.update()
 
-    def paintEvent(self, event) -> None:  # noqa: N802
+    def paintEvent(self, _event: object) -> None:  # noqa: N802
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
         w = self.width()
         h = self.height()
@@ -217,8 +218,8 @@ class MonitorPage(QWidget):
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
-        scroll.setFrameShape(QFrame.NoFrame)
-        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scroll.setStyleSheet("background: #111318; border: none;")
 
         container = QWidget()
@@ -226,7 +227,7 @@ class MonitorPage(QWidget):
         self._content = QVBoxLayout(container)
         self._content.setContentsMargins(32, 32, 32, 32)
         self._content.setSpacing(16)
-        self._content.setAlignment(Qt.AlignTop)
+        self._content.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self._build_stats_card()
         self._build_metrics_card()
@@ -280,11 +281,13 @@ class MonitorPage(QWidget):
         self._engine.metrics_updated.connect(self.update_metrics)
         self._engine.transcribed.connect(self._on_transcribed)
 
-    def _on_transcribed(self, text: str, meta: dict) -> None:
+    def _on_transcribed(self, text: str, meta: dict[str, float | str]) -> None:
         self._transcription_count += 1
-        self._total_latency_ms += meta.get("latency_ms", 0.0)
+        latency_ms = meta.get("latency_ms", 0.0)
+        self._total_latency_ms += latency_ms if isinstance(latency_ms, float) else 0.0
         self._total_chars += len(text)
-        self._total_duration_ms += meta.get("duration_ms", 0.0)
+        duration_ms = meta.get("duration_ms", 0.0)
+        self._total_duration_ms += duration_ms if isinstance(duration_ms, float) else 0.0
 
         avg_lat = (
             self._total_latency_ms / self._transcription_count
@@ -320,7 +323,7 @@ class MonitorPage(QWidget):
             label = f"{total_s:.1f}s"
         self._stat_items["total_time"].set_value(label)
 
-    def update_metrics(self, metrics) -> None:
+    def update_metrics(self, metrics: Metrics) -> None:
         self._metric_rows["ram"].add_point(metrics.ram_mb)
         self._metric_rows["vram"].add_point(metrics.vram_mb)
         self._metric_rows["gpu"].add_point(metrics.gpu_percent)

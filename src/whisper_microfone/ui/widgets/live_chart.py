@@ -60,7 +60,7 @@ class LiveChart(QWidget):
     # Paint
     # ------------------------------------------------------------------
 
-    def paintEvent(self, _event: object) -> None:  # type: ignore[override]
+    def paintEvent(self, _event: object) -> None:
         if len(self._buffer) < 2:
             return
 

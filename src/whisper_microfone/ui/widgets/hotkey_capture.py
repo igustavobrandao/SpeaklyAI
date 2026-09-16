@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtGui import QKeyEvent
+from PySide6.QtGui import QFocusEvent, QKeyEvent
 from PySide6.QtWidgets import (
     QFrame,
     QHBoxLayout,
@@ -168,6 +168,8 @@ class HotkeyCapture(QWidget):
     def _clear_badges_area(self) -> None:
         while self._badges_area.count():
             item = self._badges_area.takeAt(0)
+            if item is None:
+                continue
             widget = item.widget()
             if widget is not None:
                 widget.deleteLater()
@@ -225,7 +227,7 @@ class HotkeyCapture(QWidget):
     # Captura de teclas
     # ------------------------------------------------------------------
 
-    def keyPressEvent(self, event: QKeyEvent) -> None:  # type: ignore[override]
+    def keyPressEvent(self, event: QKeyEvent) -> None:
         if not self._capturing:
             super().keyPressEvent(event)
             return
@@ -248,7 +250,7 @@ class HotkeyCapture(QWidget):
         self._refresh_display()
         self.combination_changed.emit(new_combo)
 
-    def focusOutEvent(self, event: object) -> None:  # type: ignore[override]
+    def focusOutEvent(self, event: QFocusEvent) -> None:
         if self._capturing:
             self._exit_capture_mode()
-        super().focusOutEvent(event)  # type: ignore[arg-type]
+        super().focusOutEvent(event)

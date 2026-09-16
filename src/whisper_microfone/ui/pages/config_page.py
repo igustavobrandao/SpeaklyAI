@@ -154,8 +154,8 @@ class ConfigPage(QWidget):
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
-        scroll.setFrameShape(QFrame.NoFrame)
-        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scroll.setStyleSheet("background: #111318; border: none;")
 
         container = QWidget()
@@ -163,7 +163,7 @@ class ConfigPage(QWidget):
         self._content = QVBoxLayout(container)
         self._content.setContentsMargins(32, 32, 32, 32)
         self._content.setSpacing(16)
-        self._content.setAlignment(Qt.AlignTop)
+        self._content.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         self._build_model_card()
         self._build_audio_card()
@@ -222,7 +222,7 @@ class ConfigPage(QWidget):
         self._btn_apply = QPushButton("Aplicar")
         self._btn_apply.setFixedHeight(36)
         self._btn_apply.setMinimumWidth(100)
-        self._btn_apply.setCursor(Qt.PointingHandCursor)
+        self._btn_apply.setCursor(Qt.CursorShape.PointingHandCursor)
         self._btn_apply.setStyleSheet(f"""
             QPushButton {{
                 background: {ACCENT};

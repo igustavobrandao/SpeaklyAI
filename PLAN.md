@@ -16,11 +16,11 @@ local/CUDA que ainda precisam ser reconciliados.
 |---|---|---|---|
 | P0 | Concluído | Alinhar specs e documentação gerada ao motor Groq | `scripts/gen_docs.py` executa e os documentos não expõem schemas removidos |
 | P0 | Concluído | Criar cobertura automatizada mínima para configuração, transcrição e pipeline do engine | Testes protegem os contratos críticos sem chamar serviços externos |
-| P0 | Concluído | Tornar a CI bloqueante para testes e typecheck do núcleo | Pytest e mypy de `config`, `core` e `engine` falham o pull request em regressões |
+| P0 | Concluído | Tornar a CI bloqueante para testes e typecheck estrito | Pytest e mypy de todos os módulos falham o pull request em regressões |
 | P1 | Concluído | Remover o script local obsoleto `scripts/pre_download_model.py` | Nenhum comando operacional promete download de modelo local |
 | P1 | Em andamento | Validar o executável Groq em build limpo do Windows | Build one-file de 287,8 MB passou; falta iniciar sem conflito de instância e concluir uma transcrição |
 | P1 | Concluído | Revisar telas e métricas herdadas de GPU/modelo local | UI diferencia as métricas do sistema do processamento Groq em nuvem |
-| P1 | Pendente | Migrar a UI para enums atuais do PySide6 e reincluí-la no mypy | A camada `ui/` volta a fazer parte do typecheck estrito |
+| P1 | Concluído | Migrar a UI para enums atuais do PySide6 e reincluí-la no mypy | A camada `ui/` faz parte do typecheck estrito com os 40 módulos validados |
 | P2 | Concluído | Atualizar versão e changelog da migração | Metadados e notas de release descrevem a arquitetura Groq |
 
 ### Contrato vigente do motor

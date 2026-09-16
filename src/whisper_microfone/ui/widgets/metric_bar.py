@@ -35,7 +35,7 @@ class _ProgressTrack(QWidget):
         self._fill_color = QColor(hex_color)
         self.update()
 
-    def paintEvent(self, _event: object) -> None:  # type: ignore[override]
+    def paintEvent(self, _event: object) -> None:
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
 
