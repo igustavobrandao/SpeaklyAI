@@ -21,6 +21,7 @@ from PySide6.QtWidgets import (
 )
 
 from whisper_microfone.config.schemas import FullConfig
+from whisper_microfone.core.history import HistoryEntry
 from whisper_microfone.engine import Engine
 
 # ---------------------------------------------------------------------------
@@ -41,9 +42,6 @@ _COL_TEXT      = 2
 _COL_DURATION  = 3
 _COL_LATENCY   = 4
 _COL_COPY      = 5
-HistoryEntry = dict[str, str | float]
-
-
 # ---------------------------------------------------------------------------
 # HistoryPage
 # ---------------------------------------------------------------------------
@@ -195,7 +193,7 @@ class HistoryPage(QWidget):
 
     def _load(self) -> None:
         try:
-            entries = self._engine._history.list(limit=500)
+            entries = self._engine.list_history(limit=500)
         except Exception:
             entries = []
         self._all_entries = entries
@@ -282,7 +280,7 @@ class HistoryPage(QWidget):
 
     def _on_clear(self) -> None:
         with suppress(Exception):
-            self._engine._history.clear()
+            self._engine.clear_history()
         self._all_entries = []
         self._table.setRowCount(0)
 

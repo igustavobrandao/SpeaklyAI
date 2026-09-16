@@ -9,7 +9,7 @@ from PySide6.QtCore import QObject, QTimer, Signal
 
 from whisper_microfone.config.schemas import FullConfig
 from whisper_microfone.core.audio import AudioRecorder
-from whisper_microfone.core.history import HistoryStore
+from whisper_microfone.core.history import HistoryEntry, HistoryStore
 from whisper_microfone.core.hotkey import PushToTalkHotkey
 from whisper_microfone.core.injector import TextInjector
 from whisper_microfone.core.metrics import MetricsCollector
@@ -113,6 +113,14 @@ class Engine(QObject):
         self.config_reloaded.emit()
         self.state_changed.emit("idle")
         logger.info("Configuração recarregada")
+
+    def list_history(self, limit: int = 500) -> list[HistoryEntry]:
+        """Retorna as transcrições mais recentes para a interface."""
+        return self._history.list(limit=limit)
+
+    def clear_history(self) -> None:
+        """Remove todas as transcrições persistidas."""
+        self._history.clear()
 
     # ------------------------------------------------------------------
     # Callbacks do hotkey — rodam em thread pynput, NÃO na UI thread

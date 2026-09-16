@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import sqlite3
 from datetime import UTC, datetime
-from typing import Any
+from typing import TypedDict, cast
 
 from whisper_microfone.config.paths import history_db_path
 from whisper_microfone.config.schemas import HistoryConfig
@@ -19,6 +19,15 @@ CREATE TABLE IF NOT EXISTS transcriptions (
 """
 
 _PRAGMA_WAL = "PRAGMA journal_mode=WAL"
+
+
+class HistoryEntry(TypedDict):
+    id: int
+    timestamp: str
+    language: str
+    text: str
+    duration_ms: float
+    latency_ms: float
 
 
 def _utc_now() -> str:
@@ -93,9 +102,9 @@ class HistoryStore:
         offset: int = 0,
         filter_lang: str = "",
         search: str = "",
-    ) -> list[dict[str, Any]]:
+    ) -> list[HistoryEntry]:
         clauses: list[str] = []
-        params: list[Any] = []
+        params: list[str | int] = []
 
         if filter_lang:
             clauses.append("language = ?")
@@ -119,7 +128,7 @@ class HistoryStore:
         with self._connect() as conn:
             rows = conn.execute(query, params).fetchall()
 
-        return [dict(row) for row in rows]
+        return [cast(HistoryEntry, dict(row)) for row in rows]
 
     def clear(self) -> None:
         with self._connect() as conn:
